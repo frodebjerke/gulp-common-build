@@ -1,6 +1,9 @@
 var jsTasks = require('./src/js');
+var lessTasks = require('./src/less');
+var gulp = require('gulp');
 
 module.exports = function (config) {
-  js(config);
-  gulp.task('all', ['js']);
+  jsTasks(config);
+  lessTasks(config);
+  gulp.task('all', ['js', 'less']);
 };

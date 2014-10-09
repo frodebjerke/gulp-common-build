@@ -12,32 +12,32 @@ var args = require('yargs').argv;
 var isProduction = !!args.production;
 
 var jsTask = function (path) {
-    var options = {
-        debug: !isProduction
-    };
+  var options = {
+    debug: !isProduction
+  };
 
-    var b = browserify(options);
-    b.add(path.jsAppFile);
+  var b = browserify(options);
+  b.add(path.jsAppFile);
 
-    return b.bundle()
-        .on('error', _.plumb.errorHandler)
-        .pipe(source('app.bundle.js'))
+  return b.bundle()
+    .on('error', _.plumb.errorHandler)
+    .pipe(source('app.bundle.js'))
 
-        .pipe(_if(isProduction, buffer()))
-        .pipe(_if(isProduction, uglify()))
+    .pipe(_if(isProduction, buffer()))
+    .pipe(_if(isProduction, uglify()))
 
-        .pipe(gulp.dest(_.join(path.outputBase, 'js/')))
-        .pipe(notify('Compiled javascript'));
+    .pipe(gulp.dest(_.join(path.outputBase, 'js/')))
+    .pipe(notify('Compiled javascript'));
 };
 
 var jsLint = function (path) {
-    return gulp.src([path.jsWatch])
-        .pipe(jshint(path.jshintrc))
-        .pipe(jshint.reporter('default'));
+  return gulp.src([path.jsWatch])
+    .pipe(jshint(path.jshintrc))
+    .pipe(jshint.reporter('default'));
 };
 
 var jsWatch = function (path) {
-    gulp.watch([path.jsWatch], ['js']);
+  gulp.watch([path.jsWatch], ['js']);
 };
 
 module.exports = function (path) {
